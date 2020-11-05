@@ -1,0 +1,57 @@
+@startuml
+
+title Verteilungsdiagramm
+
+node "3D Drucker" {
+  [Empfang]
+  [Drucken]
+  [Status + Versand]
+
+}
+node "Cameras" {
+  [Erfassung]
+  [Videodaten]
+  [Versenden]
+
+}
+node "Sicherheit" {
+  [Wärmesensor-Modul]
+  [Rauchsensor-Modul]
+}
+
+
+node "zentraler Druckserver" {
+  [Versenden]
+  [Auswahl]
+  [Steuern]
+  [Druckerdaten]
+  [Netzwerk-ModulA]-->[Netzwerk-ClientA]
+
+}
+
+
+database "PostgreSQL\n" {
+    [Raspberry C]-->[de_a]
+    [Raspberry C]-->[de_b]
+    [Details zu den Druckervorgängen] as de_a
+    [Details zu Druckern] as de_b
+}
+node "Zentraler Verwaltungsserver"{
+  [Druckaufträge]
+  [Web-Modul]-->[Web-Client]
+  [Netzwerk-ModulB]-->[Netzwerk-ClientB]
+
+}
+node "Web-Client" {
+
+}
+node "Netzwerk-ClientA" {
+
+}
+node "Wärmesensoren" {
+
+}
+node "Rauchsensoren" {
+
+}
+@enduml
