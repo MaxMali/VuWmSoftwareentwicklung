@@ -14,44 +14,42 @@ node "Cameras" {
   [Versenden]
 
 }
-node "Sicherheit" {
-  [Wärmesensor-Modul]
-  [Rauchsensor-Modul]
+node "Sicherheit-Einheit" {
+  [Sensoren]
+  [Alarm]
+  [Notstop]
+  [Monitoring]
+  [Sicherheitsdaten]
 }
 
 
-node "zentraler Druckserver" {
+node "Zentraler Druckserver" {
   [Versenden]
   [Auswahl]
   [Steuern]
-  [Druckerdaten]
-  [Netzwerk-ModulA]-->[Netzwerk-ClientA]
-
+  [Empfang]
+  [Druckerdatenbank]
+  [Druckauftragswarteschlange]
+  [Netzwerk-Modul-A]-->[Netzwerk-Client-A]
 }
 
 
-database "PostgreSQL\n" {
-    [Raspberry C]-->[de_a]
-    [Raspberry C]-->[de_b]
-    [Details zu den Druckervorgängen] as de_a
-    [Details zu Druckern] as de_b
-}
 node "Zentraler Verwaltungsserver"{
   [Druckaufträge]
   [Web-Modul]-->[Web-Client]
-  [Netzwerk-ModulB]-->[Netzwerk-ClientB]
-
+  [Netzwerk-Modul-B]-->[Netzwerk-Client-B]
 }
 node "Web-Client" {
 
 }
-node "Netzwerk-ClientA" {
+node "Mobil-Client Admin" {
 
 }
-node "Wärmesensoren" {
+node "Netzwerk-Client-A" {
 
 }
-node "Rauchsensoren" {
+node "Netzwerk-Client-B" {
 
 }
+
 @enduml
