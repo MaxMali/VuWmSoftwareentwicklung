@@ -1,0 +1,133 @@
+
+
+@startuml
+class Drucker {
+  - id : int
+  - start : Date
+  - end : Date
+
+  + getId() : int
+  + setId(int i) : void
+  + getStart() : Date
+  - setStart(Date d) : void
+  + getEnd() : Date
+  - setEnd(Date d) : void
+  + startSession() : void
+  + endSession() : void
+}
+
+class Profile {
+  - title : String
+  - infoText : String
+  - publicLinks : Link[]
+  - selectedTheme : Theme
+
+  + getTitle() : String
+  + setTitle(String t) : void
+  + getInfoText() : String
+  + setInfoText(String it) : void
+  - getPublicLinks() : Link[]
+  - setPublicLinks(Link[] pl) : void
+  + getSelectedTheme() : Theme
+  + setSelectedTheme(Theme t) : void
+  + showProfile() : void
+  + getOnlineState() : boolean
+}
+
+class Benutzer {
+  - font : Font
+  - fontColor : Color
+  - backgroundColor : Color
+  - verticalDesign : boolean
+
+  + getFont() : Font
+  + setFont(Font f) : void
+  + getFontColor() : Color
+  + setFontColor(Color fc) : void
+  + getBackgroundColor() : Color
+  + setBackgroundColor(Color bc) : void
+  + getVerticalDesign() : boolean
+  + setVerticalDesign(boolean vd) : void
+}
+
+class Benutzer {
+  - id : int
+  - firstName : String
+  - lastName : String
+  - email : String
+  - username : String
+  - password : String
+  - activated : boolean
+  - registerDate : Date
+  - isOnline : boolean
+
+  + getId() : int
+  + setId(int i) : void
+  + getFirstName() : String
+  + setFirstName(String fn) : void
+  + getLastName() : String
+  + setLastName(String ln) : void
+  + getEmail() : String
+  + setEmail(String e) : void
+  + getUsername() : String
+  + setUsername(String u) : void
+  + getPassword() : String
+  + setPassword(String pw) : void
+  - getActivated() : boolean
+  - setActivated(boolean act) : void
+  + getRegisterDate() : Date
+  - setRegisterDate(Date rd) : void
+  + getIsOnline() : boolean
+  + setIsOnline(boolean io) : void
+  + activate() : void
+  + register() : void
+  + login() : void
+}
+
+class Group {
+  - id : int
+  - name : String
+
+  + getId() : int
+  + setId(int i) : void
+  + getName() : String
+  + setName(String n) : void
+}
+
+class Kamera {
+  - id : int
+  - name : String
+
+  + getId() : int
+  + setId(int i) : void
+  + getName() : String
+  + setName(String n) : void
+}
+
+class Management {
+  + editUser(User usr) : void
+  + punishUser(User usr) : void
+  + editTag(Tag t) : void
+}
+
+
+
+
+
+/'
+UserRole <|-- AdminRole : extends
+Linklist o-- User
+Linklist *-- Link
+Session o-- User
+Group o-- User
+UserRole *-- Group
+AdminRole *-- Group
+AdminRole -- Management
+Link -- Tag
+Profile o-- User
+Profile o-- Theme
+Profile -- Linklist
+Profile -- Session
+'/
+@enduml
+
