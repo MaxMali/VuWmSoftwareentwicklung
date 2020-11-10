@@ -1,55 +1,84 @@
 @startuml
 
 title Verteilungsdiagramm
+rectangle Druckerraum {
 
-node "3D Drucker" {
-  [Empfang]
-  [Drucken]
-  [Status + Versand]
+    node "3D-Drucker" as 3dd {
+      [Empfang + Versand] as em_3ddrucker
+      [Drucken]
+      [Status]
+
+      }
+   node "Cameras" as c{
+      [Empfang] as em_c
+      [Übertragung] as ve_c
+    }
+    node "Steuerungs-Druckserver" as std{
+      [Empfang] as em_steuerung
+      [Versand] as ve_steuerung
+    }
+
+    node "Sensoren" as s{
+      [Empfang + Versand] as em_s
+      [Erfassung] as ef
+    }
+
+    node "Robotor-Arm" as ra {
+      [Empfang + Versand] as em_ra
+      [Bewegung]
+      [Druckbettwechsel]
+    }
+
 
 }
-node "Cameras" {
-  [Erfassung]
-  [Videodaten]
-  [Versenden]
+rectangle Serverraum {
+    node "Zentraler Druckserver" as zds{
+      [Empfang + Versand] as em_zentral
+      [Auswahl]
+      [Steuern]
+      [Auftragswarteschlange]
+      storage Speicher {
+        [Videodaten]
+      }
+      node "Benutzer-Modul"{
+            [Verwaltung]
+            [Web-Modul]
+        }
 
+    }
+
+    node "Sicherheits-Server" as shs {
+      [Empfang + Versand] as em_sicherheit
+      [Sensoren]
+      [Alarm]
+      [Notstop]
+      [Monitoring]
+      [Sicherheitsdaten]
+      [Überwachen]
+      [Firewall]
+      storage Speicher as stor {
+        [Backup]
+      }
+    }
+
+    database "Datenbankserver" as ds{
+      [Empfang + Versand]
+      [Archivierung]
+
+      database Drucker
+      database Benutzer
+      database Sicherheit
+      database Aufträge
+    }
 }
-node "Sicherheit-Einheit" {
-  [Sensoren]
-  [Alarm]
-  [Notstop]
-  [Monitoring]
-  [Sicherheitsdaten]
-}
-
-
-node "Zentraler Druckserver" {
-  [Versenden]
-  [Auswahl]
-  [Steuern]
-  [Empfang]
-  [Druckerdatenbank]
-  [Druckauftragswarteschlange]
-  [Netzwerk-Modul-A]-->[Netzwerk-Client-A]
-}
-
-
-node "Zentraler Verwaltungsserver"{
-  [Druckaufträge]
-  [Web-Modul]-->[Web-Client]
-  [Netzwerk-Modul-B]-->[Netzwerk-Client-B]
-}
-node "Web-Client" {
-
-}
-node "Mobil-Client Admin" {
-
-}
-node "Netzwerk-Client-A" {
-
-}
-node "Netzwerk-Client-B" {
-
-}
-
+' Verlinkung
+  3dd -u-> std :<<USB>>
+  c -u-> std :<<USB>>
+  ra -l-> std :<<USB>>
+  std --> zds :<<LAN>>
+  zds --> shs :<<LAN>>
+  std --> shs :<<LAN>>
+  s --> shs :<<LAN>>
+ zds --> ds
+ shs --> ds
 @enduml
