@@ -1,84 +1,118 @@
 @startuml
 
 title Verteilungsdiagramm
-rectangle Druckerraum {
+     cloud Internet{
+     shs --> Internet
+     Client --> Internet
+     }
+     node Client <<device>>{
+        node Browser <<device>>{
+        artifact Website <<artifact>>
+        }
+     }
 
-    node "3D-Drucker" as 3dd {
-      [Empfang + Versand] as em_3ddrucker
-      [Drucken]
-      [Status]
+    rectangle Serverraum {
 
-      }
-   node "Cameras" as c{
-      [Empfang] as em_c
-      [Übertragung] as ve_c
-    }
-    node "Steuerungs-Druckserver" as std{
-      [Empfang] as em_steuerung
-      [Versand] as ve_steuerung
-    }
+        node "Ethernet-Switch" as es2  {
+        [RJ45-Port] as ns_es2
+        }
+        node "Zentraler Druck-/Verwaltungsserver" as zds  <<device>> {
+          [Auswahl]
+          [Steuern]
+          [Auftragswarteschlange]
 
-    node "Sensoren" as s{
-      [Empfang + Versand] as em_s
-      [Erfassung] as ef
-    }
+          node  "Web-Server" as ds  <<device>> {
+            node "Benutzer-Modul"{
+                [Verwaltung]
+                [Web-Anwendung]
+                [Web-Modul]
+            }
+          }
+          node  "Datenbankserver" as dbs  <<device>> {
+              database Drucker
+              database Benutzer
+              database Sicherheit
+              database Aufträge
+        }
+         storage Speicher {
+            [Videodaten]
+            [Druckdaten]
+          }
 
-    node "Robotor-Arm" as ra {
-      [Empfang + Versand] as em_ra
-      [Bewegung]
-      [Druckbettwechsel]
-    }
+        }
+        node "Sicherheits-Server" as shs <<device>> {
+          [Empfang + Versand] as em_sicherheit
+          [Alarm] <<artifact>>
+          [Notstop] <<artifact>>
+          [Monitoring] <<component>>
+          [Sicherheitsdaten]
+          [Routing] <<component>>
+          [Firewall] <<component>>
+          [Netzwerk-Schnittestelle] as ns_shs
+          storage Speicher as stor {
+            [Backup]
+          }
+        }
+        node "Computer"  {
+        [Netzwerk-Schnittestelle]
+        }
+     }
 
+rectangle "3D-Drucker Verwaltung"  {
 
-}
-rectangle Serverraum {
-    node "Zentraler Druckserver" as zds{
-      [Empfang + Versand] as em_zentral
-      [Auswahl]
-      [Steuern]
-      [Auftragswarteschlange]
-      storage Speicher {
-        [Videodaten]
-      }
-      node "Benutzer-Modul"{
-            [Verwaltung]
-            [Web-Modul]
+    rectangle Druckerraum {
+
+        node "Ethernet-Switch" as es1 <<device>>   {
+        [RJ45-Port]
+        }
+               node "Steuerungs-Druckserver" as std  <<device>> {
+        [API-Schnittstelle] as ve_steuerung
+        [Netzwerk-Schnittestelle] as ns_std
+        }
+        node "USB Hub" as usbhub  <<device>> {
+        [Netzwerk-Schnittestelle] as usbhub_std
         }
 
-    }
 
-    node "Sicherheits-Server" as shs {
-      [Empfang + Versand] as em_sicherheit
-      [Sensoren]
-      [Alarm]
-      [Notstop]
-      [Monitoring]
-      [Sicherheitsdaten]
-      [Überwachen]
-      [Firewall]
-      storage Speicher as stor {
-        [Backup]
-      }
-    }
+            node "3D-Drucker" as 3dd <<device>> {
+              [Drucken]
+              [Status] as 3dd_status
+              [USB-Port]
+              }
+              together {
+                node "Sensoren" as s <<device>> {
+                  [Überwachung]
+                  [Erfassung]
+                }
+                node "Kameras" as c <<device>> {
+                  [Bilderfassung]
+                  [Übertragung]
+                }
+            }
+              node "Robotor-Arm" as ra  <<device>> {
+              [Status] as ra_status
+              [Druckbettwechsel]
+              [Bewegung]
+            }
 
-    database "Datenbankserver" as ds{
-      [Empfang + Versand]
-      [Archivierung]
-
-      database Drucker
-      database Benutzer
-      database Sicherheit
-      database Aufträge
     }
+    ' Verlinkung
+    Druckerraum -[hidden]d->Serverraum
+      3dd -u-> usbhub :<<USB>>
+      c -u-> usbhub :<<USB>>
+      ra -l-> usbhub :<<USB>>
+      s --> usbhub :<<TCP/IP>>
+      usbhub -u->es1:<<TCP/IP>>
+      std -> es1:<<TCP/IP>>
+      std --> zds :<<TCP/IP>>
+      zds --> shs :<<TCP/IP>>
+      es1 -- es2
+
+     zds --> ds
+     shs --> ds
+
+
 }
-' Verlinkung
-  3dd -u-> std :<<USB>>
-  c -u-> std :<<USB>>
-  ra -l-> std :<<USB>>
-  std --> zds :<<LAN>>
-  zds --> shs :<<LAN>>
-  std --> shs :<<LAN>>
-  s --> shs :<<LAN>>
- zds --> ds
- shs --> ds
+
+
 @enduml
