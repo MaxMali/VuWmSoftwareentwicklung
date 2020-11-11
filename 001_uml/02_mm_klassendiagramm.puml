@@ -1,56 +1,101 @@
-
-
 @startuml
-class Drucker {
+
+title Klassendiagramm 3D-Drucker-Pool
+
+class Printer {
   - id : int
-  - start : Date
-  - end : Date
+  - label : String
+  - profileId : int
 
   + getId() : int
   + setId(int i) : void
-  + getStart() : Date
-  - setStart(Date d) : void
-  + getEnd() : Date
-  - setEnd(Date d) : void
-  + startSession() : void
-  + endSession() : void
+  + getLabel() : String
+  + setLabel(String l) : void
+  + getProfileId() : int
+  + setprofileId(int i) : void
+
 }
 
-class Profile {
-  - title : String
-  - infoText : String
-  - publicLinks : Link[]
-  - selectedTheme : Theme
+class PinterProfile {
+  - id : int
+  - label : String
+  - name : String
 
-  + getTitle() : String
-  + setTitle(String t) : void
-  + getInfoText() : String
-  + setInfoText(String it) : void
-  - getPublicLinks() : Link[]
-  - setPublicLinks(Link[] pl) : void
-  + getSelectedTheme() : Theme
-  + setSelectedTheme(Theme t) : void
-  + showProfile() : void
-  + getOnlineState() : boolean
+  + getId() : int
+  + setId(int i) : void
+  + getLabel() : String
+  + setLabel(String l) : void
+  + getName() : String
+  + setName(String n) : void
+
 }
 
-class Benutzer {
-  - font : Font
-  - fontColor : Color
-  - backgroundColor : Color
-  - verticalDesign : boolean
 
-  + getFont() : Font
-  + setFont(Font f) : void
-  + getFontColor() : Color
-  + setFontColor(Color fc) : void
-  + getBackgroundColor() : Color
-  + setBackgroundColor(Color bc) : void
-  + getVerticalDesign() : boolean
-  + setVerticalDesign(boolean vd) : void
+class PrintJob {
+  - id : int
+  - name : String
+
+  + getId() : int
+  + setId(int i) : void
+  + getName() : String
+  + setName(String n) : void
+
 }
 
-class Benutzer {
+class PrintJobQueue {
+  - id : int
+
+  + getId() : int
+  + setId(int i) : void
+
+}
+
+class PrinterProducer {
+  - id : int
+  - name : String
+
+  + getId() : int
+  + setId(int i) : void
+  + getName() : String
+  + setName(String n) : void
+
+}
+
+class PrintJobVideo {
+  - id : int
+  - fileName : String
+
+  + getId() : int
+  + setId(int i) : void
+  + getLabel() : String
+  + setLabel(String l) : void
+  + getFileName() : String
+  + setFileName(String n) : void
+
+}
+
+class PrintJobPicture {
+  - id : int
+  - fileName : String
+
+  + getId() : int
+  + setId(int i) : void
+  + getFileName() : String
+  + setFileName(String n) : void
+
+}
+
+class PrinterManager {
+  - id : int
+
+
+  + getId() : int
+  + setId(int i) : void
+
+}
+
+
+class User {
   - id : int
   - firstName : String
   - lastName : String
@@ -58,8 +103,7 @@ class Benutzer {
   - username : String
   - password : String
   - activated : boolean
-  - registerDate : Date
-  - isOnline : boolean
+  - isAdmin : boolean
 
   + getId() : int
   + setId(int i) : void
@@ -73,18 +117,17 @@ class Benutzer {
   + setUsername(String u) : void
   + getPassword() : String
   + setPassword(String pw) : void
-  - getActivated() : boolean
-  - setActivated(boolean act) : void
-  + getRegisterDate() : Date
-  - setRegisterDate(Date rd) : void
-  + getIsOnline() : boolean
-  + setIsOnline(boolean io) : void
+  + getActivated() : boolean
+  + setActivated(boolean act) : void
+  + getIsAdmin() : boolean
+  - setIsAdmin(boolean act) : void
   + activate() : void
   + register() : void
   + login() : void
 }
 
-class Group {
+
+class Camera {
   - id : int
   - name : String
 
@@ -94,40 +137,85 @@ class Group {
   + setName(String n) : void
 }
 
-class Kamera {
+
+class RoboticArm {
   - id : int
-  - name : String
+  - label : String
+  - status . String
 
   + getId() : int
   + setId(int i) : void
-  + getName() : String
-  + setName(String n) : void
+  + getLabel() : String
+  + setLabel(String l) : void
+  + getStatus() : String
+  + setStatus(String l) : void
+  + doJob(RoboticArmJob r): String
+
+}
+class RoboticArmJob {
+  - id : int
+  - label : String
+
+  + getId() : int
+  + setId(int i) : void
+  + getLabel() : String
+  + setLabel(String l) : void
+  + doJob(RoboticArmJob r): String
+
 }
 
-class Management {
-  + editUser(User usr) : void
-  + punishUser(User usr) : void
-  + editTag(Tag t) : void
+class RoboticArmManager {
+
+  + startRoboticArmJob() :
+  + checkStatus() :
+
+}
+
+class Sensor {
+  - id : int
+  - label : String
+  - status
+
+  + getId() : int
+  + setId(int i) : void
+  + getLabel() : String
+  + setLabel(String l) : void
+
+
+}
+
+class PrintBed {
+  - id : int
+  - status : int
+
+  + getId() : int
+  + setId(int i) : void
+  + getStatus() : String
+  + setStatus(String l) : void
+
+}
+
+class Alarm {
+  - id : int
+  - typ : String
+
+  + getId() : int
+  + setId(int i) : void
+  + getTyp() : String
+  + setTyp(String a) : void
+
+
+}
+
+class EmergencyStop {
+
+  + stopPrintJob(int id) : String
+  + stopAllPrintJobs() : String
+
 }
 
 
 
 
-
-/'
-UserRole <|-- AdminRole : extends
-Linklist o-- User
-Linklist *-- Link
-Session o-- User
-Group o-- User
-UserRole *-- Group
-AdminRole *-- Group
-AdminRole -- Management
-Link -- Tag
-Profile o-- User
-Profile o-- Theme
-Profile -- Linklist
-Profile -- Session
-'/
 @enduml
 
