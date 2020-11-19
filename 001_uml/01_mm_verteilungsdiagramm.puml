@@ -1,20 +1,14 @@
 @startuml
 
 title Verteilungsdiagramm
-     cloud Internet{
-     shs --> Internet
-     Client --> Internet
-     }
-     node Client <<device>>{
-        node Browser <<device>>{
-        artifact Website <<artifact>>
-        }
-     }
+
+rectangle "3D-Drucker-Pool Verwaltung"  {
 
     rectangle Serverraum {
 
-        node "Ethernet-Switch" as es2  {
-        [RJ45-Port] as ns_es2
+        node "Router" as es1 <<device>>   {
+        [Routing] <<component>>
+        [Firewall] <<component>>
         }
         node "Zentraler Druck-/Verwaltungsserver" as zds  <<device>> {
           [Auswahl]
@@ -22,10 +16,11 @@ title Verteilungsdiagramm
           [Auftragswarteschlange]
 
           node  "Web-Server" as ds  <<device>> {
-            node "Benutzer-Modul"{
-                [Verwaltung]
-                [Web-Anwendung]
-                [Web-Modul]
+            node "Web-Modul"{
+                [Druckauftragsverwaltung]
+                [Druckerverwaltung]
+                [Druckauftragsverwaltung]
+                [Benutzerverwaltung]
             }
           }
           node  "Datenbankserver" as dbs  <<device>> {
@@ -46,26 +41,25 @@ title Verteilungsdiagramm
           [Notstop] <<artifact>>
           [Monitoring] <<component>>
           [Sicherheitsdaten]
-          [Routing] <<component>>
+
           [Firewall] <<component>>
           [Netzwerk-Schnittestelle] as ns_shs
           storage Speicher as stor {
             [Backup]
           }
         }
-        node "Computer"  {
-        [Netzwerk-Schnittestelle]
+        node "Computer" <<device>> {
+        [Verwalten]
         }
-     }
-
-rectangle "3D-Drucker Verwaltung"  {
+    }
 
     rectangle Druckerraum {
 
-        node "Ethernet-Switch" as es1 <<device>>   {
-        [RJ45-Port]
+        node "Ethernet-Switch" as es2  {
+        [RJ45-Port] as ns_es2
         }
-               node "Steuerungs-Druckserver" as std  <<device>> {
+
+        node "Steuerungs-Druckserver" as std  <<device>> {
         [API-Schnittstelle] as ve_steuerung
         [Netzwerk-Schnittestelle] as ns_std
         }
@@ -73,29 +67,27 @@ rectangle "3D-Drucker Verwaltung"  {
         [Netzwerk-Schnittestelle] as usbhub_std
         }
 
-
-            node "3D-Drucker" as 3dd <<device>> {
-              [Drucken]
-              [Status] as 3dd_status
-              [USB-Port]
-              }
-              together {
-                node "Sensoren" as s <<device>> {
-                  [Überwachung]
-                  [Erfassung]
-                }
-                node "Kameras" as c <<device>> {
-                  [Bilderfassung]
-                  [Übertragung]
-                }
+        node "3D-Drucker" as 3dd <<device>> {
+          [Drucken]
+          [Status] as 3dd_status
+          }
+          together {
+            node "Sensoren" as s <<device>> {
+              [Überwachung]
+              [Erfassung]
             }
-              node "Robotor-Arm" as ra  <<device>> {
-              [Status] as ra_status
-              [Druckbettwechsel]
-              [Bewegung]
+            node "Kameras" as c <<device>> {
+              [Bilderfassung]
+              [Übertragung]
             }
+        }
+          node "Robotor-Arm" as ra  <<device>> {
+          [Druckbettwechsel]
+          [Bewegung]
+        }
 
     }
+
     ' Verlinkung
     Druckerraum -[hidden]d->Serverraum
       3dd -u-> usbhub :<<USB>>
@@ -110,8 +102,6 @@ rectangle "3D-Drucker Verwaltung"  {
 
      zds --> ds
      shs --> ds
-
-
 }
 
 
