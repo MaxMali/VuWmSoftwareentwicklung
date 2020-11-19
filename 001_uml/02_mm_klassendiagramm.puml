@@ -6,20 +6,29 @@ class Printer {
   - id : int
   - label : String
   - profileId : int
+  - producerId: int
 
   + getId() : int
   + setId(int i) : void
   + getLabel() : String
   + setLabel(String l) : void
   + getProfileId() : int
-  + setprofileId(int i) : void
+  + setProfileId(int i) : void
+  + getProducerId() : int
+  + setProducerId(int i) : void
 
 }
 
 class PinterProfile {
   - id : int
-  - label : String
+  - x_size : int
+  - y_size : int
+  - z_size : int
   - name : String
+  - printbed_type
+  - printbed_heatable : boolean
+  - extrudor =
+  - filament_color
 
   + getId() : int
   + setId(int i) : void
@@ -33,98 +42,80 @@ class PinterProfile {
 
 class PrintJob {
   - id : int
-  - name : String
+  - description : String
+  - printerID : int
+  - PRINTOBJEKT
 
   + getId() : int
   + setId(int i) : void
-  + getName() : String
-  + setName(String n) : void
+  + getDescription() : String
+  + setDescription(String n) : void
 
 }
 
 class PrintJobQueue {
-  - id : int
-
-  + getId() : int
-  + setId(int i) : void
 
 }
 
 class PrinterProducer {
   - id : int
   - name : String
+  - description : String
+  - specialFeatures : String
 
   + getId() : int
   + setId(int i) : void
   + getName() : String
-  + setName(String n) : void
+  + setName(String s) : void
+  + getDescription() : String
+  + setDescription(String s) : void
+  + getSpecialFeatures() : String
+  + setSpecialFeatures(String s) : void
 
 }
 
-class PrintJobVideo {
+class PrintJobVideoPicture {
   - id : int
   - fileName : String
+  - timeStamp : date
+  - description : String
 
   + getId() : int
   + setId(int i) : void
   + getLabel() : String
-  + setLabel(String l) : void
+  + setLabel(String s) : void
   + getFileName() : String
-  + setFileName(String n) : void
+  + setFileName(String s) : void
+  + getTimeStamp() : date
+  + setTimeStamp() : void
+  + getDescription() : String
+  + setDescription(String s) : void
 
 }
-
-class PrintJobPicture {
+class PrintBed {
   - id : int
-  - fileName : String
+  - status : int
+  - type : String
 
   + getId() : int
   + setId(int i) : void
-  + getFileName() : String
-  + setFileName(String n) : void
+  + getStatus() : String
+  + setStatus(String s) : void
+  + getType() : String
+  + setType(String s) : void
 
 }
 
 class PrinterManager {
   - id : int
 
-
   + getId() : int
   + setId(int i) : void
 
 }
 
 
-class User {
-  - id : int
-  - firstName : String
-  - lastName : String
-  - email : String
-  - username : String
-  - password : String
-  - activated : boolean
-  - isAdmin : boolean
 
-  + getId() : int
-  + setId(int i) : void
-  + getFirstName() : String
-  + setFirstName(String fn) : void
-  + getLastName() : String
-  + setLastName(String ln) : void
-  + getEmail() : String
-  + setEmail(String e) : void
-  + getUsername() : String
-  + setUsername(String u) : void
-  + getPassword() : String
-  + setPassword(String pw) : void
-  + getActivated() : boolean
-  + setActivated(boolean act) : void
-  + getIsAdmin() : boolean
-  - setIsAdmin(boolean act) : void
-  + activate() : void
-  + register() : void
-  + login() : void
-}
 
 
 class Camera {
@@ -141,7 +132,7 @@ class Camera {
 class RoboticArm {
   - id : int
   - label : String
-  - status . String
+  - status : String
 
   + getId() : int
   + setId(int i) : void
@@ -184,16 +175,6 @@ class Sensor {
 
 }
 
-class PrintBed {
-  - id : int
-  - status : int
-
-  + getId() : int
-  + setId(int i) : void
-  + getStatus() : String
-  + setStatus(String l) : void
-
-}
 
 class Alarm {
   - id : int
@@ -214,7 +195,30 @@ class EmergencyStop {
 
 }
 
+class User {
+  - id : int
+  - email : String
+  - username : String
+  - password : String
+  - activated : boolean
+  - isAdmin : boolean
 
+  + getId() : int
+  + setId(int i) : void
+  + getEmail() : String
+  + setEmail(String e) : void
+  + getUsername() : String
+  + setUsername(String u) : void
+  + getPassword() : String
+  + setPassword(String pw) : void
+  + getActivated() : boolean
+  + setActivated(boolean act) : void
+  + getIsAdmin() : boolean
+  - setIsAdmin(boolean act) : void
+  + activate() : void
+  + register() : void
+  + login() : void
+}
 
 
 @enduml
