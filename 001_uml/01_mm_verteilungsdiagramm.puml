@@ -1,10 +1,13 @@
 @startuml
 
 title Verteilungsdiagramm
+scale 1.5
+scale 200 width
 
-rectangle "3D-Drucker-Pool Verwaltung"  {
 
-    rectangle Serverraum {
+rectangle "3D-Drucker-Pool Verwaltung" as vv {
+
+    rectangle Serverraum as sr{
 
         node "Router" as es1 <<device>>   {
         [Routing] <<component>>
@@ -53,7 +56,7 @@ rectangle "3D-Drucker-Pool Verwaltung"  {
         }
     }
 
-    rectangle Druckerraum {
+    rectangle "Druckerraum" #lawnGreen  {
 
         node "Ethernet-Switch" as es2  {
         [RJ45-Port] as ns_es2
@@ -89,19 +92,15 @@ rectangle "3D-Drucker-Pool Verwaltung"  {
     }
 
     ' Verlinkung
-    Druckerraum -[hidden]d->Serverraum
-      3dd -u-> usbhub :<<USB>>
-      c -u-> usbhub :<<USB>>
-      ra -l-> usbhub :<<USB>>
-      s --> usbhub :<<TCP/IP>>
-      usbhub -u->es1:<<TCP/IP>>
-      std -> es1:<<TCP/IP>>
-      std --> zds :<<TCP/IP>>
-      zds --> shs :<<TCP/IP>>
-      es1 -- es2
+    dr --> sr
+    ra --> usbhub
+    usbhub --> es2
+    es2 --> es1
+    es1 --> zds
+    zds --> shs
 
-     zds --> ds
-     shs --> ds
+
+
 }
 
 
