@@ -1,25 +1,17 @@
 @startuml
 
 title Verteilungsdiagramm
-scale 1.5
-scale 200 width
+scale 1
+' scale 500 width
 
-
-rectangle "3D-Drucker-Pool Verwaltung" as vv {
-
-    rectangle Serverraum as sr{
-
-        node "Router" as es1 <<device>>   {
-        [Routing] <<component>>
-        [Firewall] <<component>>
-        }
+rectangle "3D-Drucker-Pool Verwaltung" as vs #DADADA {
+    rectangle Serverraum as sr #C4C4C4 {
         node "Zentraler Druck-/Verwaltungsserver" as zds  <<device>> {
           [Auswahl]
           [Steuern]
           [Auftragswarteschlange]
-
           node  "Web-Server" as ds  <<device>> {
-            node "Web-Modul"{
+            node "Web-Modul" {
                 [Druckauftragsverwaltung]
                 [Druckerverwaltung]
                 [Druckauftragsverwaltung]
@@ -31,12 +23,11 @@ rectangle "3D-Drucker-Pool Verwaltung" as vv {
               database Benutzer
               database Sicherheit
               database Aufträge
-        }
-         storage Speicher {
+          }
+         storage Speicher as stor2 {
             [Videodaten]
             [Druckdaten]
           }
-
         }
         node "Sicherheits-Server" as shs <<device>> {
           [Empfang + Versand] as em_sicherheit
@@ -44,37 +35,36 @@ rectangle "3D-Drucker-Pool Verwaltung" as vv {
           [Notstop] <<artifact>>
           [Monitoring] <<component>>
           [Sicherheitsdaten]
-
           [Firewall] <<component>>
           [Netzwerk-Schnittestelle] as ns_shs
           storage Speicher as stor {
             [Backup]
           }
         }
-        node "Computer" <<device>> {
-        [Verwalten]
+        node "Computer" as com <<device>> {
+            [Verwalten]
+        }
+        node "Router" as router <<device>> #414141  {
+            [Routing] <<component>>
+            [Firewall] <<component>>
         }
     }
-
-    rectangle "Druckerraum" #lawnGreen  {
-
-        node "Ethernet-Switch" as es2  {
+    rectangle "Druckerraum" as dr #C4C4C4 {
+        node "Ethernet-Switch" as es2 <<device>> #414141 {
         [RJ45-Port] as ns_es2
         }
-
         node "Steuerungs-Druckserver" as std  <<device>> {
-        [API-Schnittstelle] as ve_steuerung
-        [Netzwerk-Schnittestelle] as ns_std
+            [API-Schnittstelle] as ve_steuerung
+            [Netzwerk-Schnittestelle] as ns_std
         }
-        node "USB Hub" as usbhub  <<device>> {
+        node "USB Hub" as usbhub  <<device>> #414141 {
         [Netzwerk-Schnittestelle] as usbhub_std
         }
-
         node "3D-Drucker" as 3dd <<device>> {
           [Drucken]
           [Status] as 3dd_status
-          }
-          together {
+        }
+        together {
             node "Sensoren" as s <<device>> {
               [Überwachung]
               [Erfassung]
@@ -84,24 +74,28 @@ rectangle "3D-Drucker-Pool Verwaltung" as vv {
               [Übertragung]
             }
         }
-          node "Robotor-Arm" as ra  <<device>> {
+        node "Robotor-Arm" as ra  <<device>> {
           [Druckbettwechsel]
           [Bewegung]
         }
-
     }
-
-    ' Verlinkung
-    dr --> sr
-    ra --> usbhub
-    usbhub --> es2
-    es2 --> es1
-    es1 --> zds
-    zds --> shs
-
-
-
+    rectangle Büro as b #C4C4C4 {
+    }
 }
+    ' Verlinkung
+    dr -[hidden]- sr
+    ra -- usbhub
+    usbhub -- es2
+    router -up- es2
+    shs -left- router
+    zds -up- router
 
+skinparam node {
 
+backgroundColor #707070
+backgroundColor<<device>> #B8896E
+}
+skinparam storage {
+backgroundColor #E4C65B
+}
 @enduml
